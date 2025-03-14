@@ -6,7 +6,7 @@
 /*   By: eeravci <eeravci@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:22:27 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/15 00:38:07 by eeravci          ###   ########.fr       */
+/*   Updated: 2025/03/15 00:51:47 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ int main(int argc, char **argv)
     } 
     pid = ft_atoi(argv[1]);
     send_signal(pid, argv[2]);
-    return (0);;
+    return (0);
     
 }

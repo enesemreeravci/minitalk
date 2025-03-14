@@ -6,7 +6,7 @@
 /*   By: eeravci <eeravci@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:40:17 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/15 00:48:37 by eeravci          ###   ########.fr       */
+/*   Updated: 2025/03/15 00:51:50 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 void handler(int signum, siginfo_t *info, void *context)
 {
     static char c = 0;
-    static int bitcount = 0;
+    static int i = 0;
 
     (void)context;
-    (void)context; 
     if (signum == SIGUSR1)
         c |= (1 << i);
     i++;
@@ -26,10 +25,14 @@ void handler(int signum, siginfo_t *info, void *context)
     {
         write(1, &c, 1);
         if (c == '\0')
+        {
             write(1, "\n", 1);
+            kill(info->si_pid, SIGUSR1);
+        }
         c = 0;
         i = 0;
     }
+    kill(info->si_pid, SIGUSR1);
 }
 
 void handler_ack(int signum)
