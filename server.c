@@ -3,63 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eeravci <eeravci@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/15 00:40:17 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/15 00:51:50 by eeravci          ###   ########.fr       */
+/*   Created: 2025/03/09 14:10:04 by eeravci           #+#    #+#             */
+/*   Updated: 2025/03/16 15:12:03 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include " minitalk.h"
+#include "minitalk.h"
 
-void handler(int signum, siginfo_t *info, void *context)
+void	ft_putnbr(int n)
 {
-    static char c = 0;
-    static int i = 0;
+	char	c;
 
-    (void)context;
-    if (signum == SIGUSR1)
-        c |= (1 << i);
-    i++;
-    if (i == 8)
-    {
-        write(1, &c, 1);
-        if (c == '\0')
-        {
-            write(1, "\n", 1);
-            kill(info->si_pid, SIGUSR1);
-        }
-        c = 0;
-        i = 0;
-    }
-    kill(info->si_pid, SIGUSR1);
+	if (n == -2147483648)
+	{
+		write(1, "-2147483648", 11);
+		return ;
+	}
+	if (n < 0)
+	{
+		write(1, "-", 1);
+		n = -n;
+	}
+	if (n >= 10)
+		ft_putnbr(n / 10);
+	c = (n % 10) + '0';
+	write(1, &c, 1);
+	// return (n);
 }
 
-void handler_ack(int signum)
+void	handler(int signum, siginfo_t *info, void *context)
 {
-    (void)signum;
-    write(1, "Signal received\n", 16);
+	static int	i;
+	static int	character;
+
+	i = 0;
+	character = 0;
+	(void)context;
+	if (signum == SIGUSR1)
+	{
+		character |= (1 << i);
+		i++;
+	}
+	else if (signum == SIGUSR2)
+	{
+		character |= (0 << i);
+		i++;
+	}
+	if (i == 8)
+	{
+		printf("%c", character);
+		if (character == '\0')
+		{
+			printf("\n");
+			kill(info->si_pid, SIGUSR1);
+		}
+		i = 0;
+		character = 0;
+	}
+	kill(info->si_pid, SIGUSR1);
 }
 
-int main(void)
+void	handler_ack(int signum)
 {
-    struct sigaction sa;
-    struct sigaction sa_ack;
+	(void)signum;
+	printf("Signal received");
+}
 
-    sa.sa_handler = handler;
-    sa_ack.sa_handler = handler_ack;
-    sigemptyset(&sa.sa_mask);
-    sigemptyset(&sa_ack.sa_mask);
-    sa.sa_flags = 0;
-    sa_ack.sa_flags = 0;
-    sigaction(SIGUSR1, &sa, NULL);
-    sigaction(SIGUSR2, &sa, NULL);
-    sigaction(SIGUSR1, &sa_ack, NULL);
-    sigaction(SIGUSR2, &sa_ack, NULL);
-    write(1, "PID: ", 5);
-    ft_putnbr(getpid(), 1);
-    write(1, "\n", 1);
-    while (1)
-        pause();
-    return (0);
+int	main(void)
+{
+	struct sigaction sa;
+
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = handler;
+	sigemptyset(&sa.sa_mask);
+	if (sigaction(SIGUSR1, &sa, NULL) == -1)
+	{
+		printf("Error: Sigaction SIGUSR1 is failed\n");
+		return (1);
+	}
+	if (sigaction(SIGUSR2, &sa, NULL) == -1)
+	{
+		printf("Error: Sigaction SIGUSR2 is failed\n");
+		return (1);
+	}
+	ft_putnbr(getpid());
+	printf("\n");
+	while (1)
+		pause();
+	return (0);
 }

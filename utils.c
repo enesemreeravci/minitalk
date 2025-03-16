@@ -3,60 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eeravci <eeravci@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/15 00:17:52 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/15 00:43:08 by eeravci          ###   ########.fr       */
+/*   Created: 2025/03/14 22:02:11 by eeravci           #+#    #+#             */
+/*   Updated: 2025/03/16 15:22:09 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include <minitalk.h>
 
-int ft_atoi(char *str)
+/*int	ft_atoi(char *str)
 {
-    int sign;
-    int result;
+	int	sign;
+	int	res;
 
-    sign = 1;
-    result = 0;
-
-    while (*str == ' ' || *str == '\t' || *str == '\n' || *str == '\v' || *str == '\f' || *str == '\r')
-        str++;
-    if (*str == '-' || *str == '+')
-    {
-        if (*str == '-')
-            sign = -1;
-        str++;
-    }
-    while (*str >= '0' && *str <= '9')
-    {
-        result = result * 10 + *str - '0';
-        str++;
-    }
-    return (result * sign);
+	sign = 1;
+	res = 0;
+	while (*str && (*str == 32 || (*str >= 9 && *str <= 13)))
+		str++;
+	while (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+	{
+		res = res * 10 + *str - '0';
+		str++;
+	}
+	return (res - sign);
 }
 
-int ft_strlen(char *str)
+int	ft_putnbr(int n)
 {
-    char *start;
+	char	c;
 
-    start = str;
-    while(*str != '\0') 
-        str++;
-    return (str - start);
+	if (n < 0)
+	{
+		write(1, "-", 1);
+		n = -n;
+	}
+	if (n > 0)
+		ft_putnbr(n / 10);
+	c = n % 10 + '0';
+	write(1, &c, 1);
+	return (n);
 }
 
-int ft_putnbr(int n)
+int	ft_strlen(char *str)
 {
-    char c;
-    if(n < 0)
-    {
-        write(1, "-", 1);
-        n = -n;
-    }
-    if(n > 9)
-        ft_putnbr(n / 10);
-    c = n % 10 + '0';
-    write(1, &c, 1);
-    return (n);
-}
+	char *start;
+
+	start = str;
+	while (*str != '\0')
+		str++;
+	return ((str - start));
+}*/

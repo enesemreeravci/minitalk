@@ -3,50 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eeravci <eeravci@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/15 00:22:27 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/15 00:51:47 by eeravci          ###   ########.fr       */
+/*   Created: 2025/03/08 21:52:09 by eeravci           #+#    #+#             */
+/*   Updated: 2025/03/16 15:16:24 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void send_signal(int pid, char *str)
+void	send_signal(int pid, char *str)
 {
-    int i;
-    int j;
-    int bit;
+	int	i;
+	int	j;
+	int	bit;
 
-    i = 0;
-    while (str[i])
-    {
-        j = 0;
-        while (j <= 7)
-        {
-            bit = (str[i] >> j) & 1;
-            if (bit == 1)
-                kill(pid, SIGUSR1);
-            else
-                kill(pif, SIGUSR2);
-            j++;
-            usleep(100);
-        }
-        i++;
-    }
+	i = 0;
+	while (str[i] != '\0')
+	{
+		j = 0;
+		while (j <= 7)
+		{
+			bit = (str[i] >> j) & i;
+			if (bit == 1)
+				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
+			j++;
+			usleep(100);
+		}
+		i++;
+	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-    int pid;
+	int	pid;
 
-    if(argc != 3)
-    {
-        write(1, "Usage: ./client [PID] [Message]\n", 32);
-        return (1);
-    } 
-    pid = ft_atoi(argv[1]);
-    send_signal(pid, argv[2]);
-    return (0);
-    
+	if (argc != 3)
+	{
+		write(1, "Usage: ./client [PID] [Message]\n", 32);
+		return (1);
+	}
+	pid = atoi(argv[1]);
+	send_signal(pid, argv[2]);
+	return (0);
 }

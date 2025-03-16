@@ -3,30 +3,44 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eeravci <eeravci@student.42.fr>            +#+  +:+       +#+         #
+#    By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/03/15 00:19:49 by eeravci           #+#    #+#              #
-#    Updated: 2025/03/15 00:43:59 by eeravci          ###   ########.fr        #
+#    Created: 2025/03/08 21:52:28 by eeravci           #+#    #+#              #
+#    Updated: 2025/03/16 15:15:41 by eeravci          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
+SRCS = client.c server.c
+
+OBJS = $(SRCS:.c=.o)
+
+CC = clang
+RM = rm -f
 CFLAGS = -Wall -Wextra -Werror
 
-NAME = minitalk.a
+NAME_SERVER = server
+NAME_CLIENT = client
 
+all: $(NAME_SERVER) $(NAME_CLIENT)
 
-# Default rule
-all: $(NAME)
+$(NAME_SERVER): server.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-# Create the library
+$(NAME_CLIENT): client.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-# Compile the library
+server.o: server.c minitalk.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# Compile .c files to .o
+client.o: client.c minitalk.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean the object files
+clean:
+	rm -f server.o client.o
 
-# Clean everything
+fclean: clean
+	rm -f $(NAME_SERVER) $(NAME_CLIENT)
 
-# Rebuid everything
+re: fclean all
+
+.PHONY: all clean fclean re
