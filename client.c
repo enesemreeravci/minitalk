@@ -6,11 +6,35 @@
 /*   By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 21:52:09 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/16 15:16:24 by eeravci          ###   ########.fr       */
+/*   Updated: 2025/03/19 11:18:54 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+/* to convert the pid number because we are not allowed to use atoi() */
+int	ft_atoi(char *str)
+{
+	int	res;
+	int	sign;
+
+	res = 0;
+	sign = 1;
+	while (*str && ((*str == 32) || (*str >= 9 && *str <= 13)))
+		str++;
+	while (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+	{
+		res = res * 10 + *str - '0';
+		str++;
+	}
+	return (res - sign);
+}
 
 void	send_signal(int pid, char *str)
 {
@@ -45,7 +69,7 @@ int	main(int argc, char **argv)
 		write(1, "Usage: ./client [PID] [Message]\n", 32);
 		return (1);
 	}
-	pid = atoi(argv[1]);
+	pid = ft_atoi(argv[1]);
 	send_signal(pid, argv[2]);
 	return (0);
 }
