@@ -6,10 +6,11 @@
 /*   By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 21:52:09 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/19 11:18:54 by eeravci          ###   ########.fr       */
+/*   Updated: 2025/03/19 12:29:13 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf/ft_printf.h"
 #include "minitalk.h"
 
 /* to convert the pid number because we are not allowed to use atoi() */

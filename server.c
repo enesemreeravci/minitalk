@@ -6,10 +6,11 @@
 /*   By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 14:10:04 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/16 15:12:03 by eeravci          ###   ########.fr       */
+/*   Updated: 2025/03/19 12:36:47 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf/ft_printf.h"
 #include "minitalk.h"
 
 void	ft_putnbr(int n)
@@ -53,10 +54,10 @@ void	handler(int signum, siginfo_t *info, void *context)
 	}
 	if (i == 8)
 	{
-		printf("%c", character);
+		ft_printf("%c", character);
 		if (character == '\0')
 		{
-			printf("\n");
+			ft_printf("\n");
 			kill(info->si_pid, SIGUSR1);
 		}
 		i = 0;
@@ -68,7 +69,7 @@ void	handler(int signum, siginfo_t *info, void *context)
 void	handler_ack(int signum)
 {
 	(void)signum;
-	printf("Signal received");
+	ft_printf("Signal received");
 }
 
 int	main(void)
@@ -80,16 +81,16 @@ int	main(void)
 	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 	{
-		printf("Error: Sigaction SIGUSR1 is failed\n");
+		ft_printf("Error: Sigaction SIGUSR1 is failed\n");
 		return (1);
 	}
 	if (sigaction(SIGUSR2, &sa, NULL) == -1)
 	{
-		printf("Error: Sigaction SIGUSR2 is failed\n");
+		ft_printf("Error: Sigaction SIGUSR2 is failed\n");
 		return (1);
 	}
 	ft_putnbr(getpid());
-	printf("\n");
+	ft_printf("\n");
 	while (1)
 		pause();
 	return (0);
