@@ -6,7 +6,7 @@
 /*   By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 14:10:04 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/19 12:36:47 by eeravci          ###   ########.fr       */
+/*   Updated: 2025/03/23 12:10:54 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,62 +31,44 @@ void	ft_putnbr(int n)
 		ft_putnbr(n / 10);
 	c = (n % 10) + '0';
 	write(1, &c, 1);
-	// return (n);
 }
 
-void	handler(int signum, siginfo_t *info, void *context)
+void	handler(int sig, siginfo_t *info, void *context)
 {
-	static int	i;
-	static int	character;
+	static int	bit = 0;
+	static int	character = 0;
 
-	i = 0;
-	character = 0;
 	(void)context;
-	if (signum == SIGUSR1)
+	if (sig == SIGUSR2)
+		character |= (1 << (7 - bit));
+	bit++;
+	if (bit == 8)
 	{
-		character |= (1 << i);
-		i++;
-	}
-	else if (signum == SIGUSR2)
-	{
-		character |= (0 << i);
-		i++;
-	}
-	if (i == 8)
-	{
-		ft_printf("%c", character);
 		if (character == '\0')
-		{
-			ft_printf("\n");
-			kill(info->si_pid, SIGUSR1);
-		}
-		i = 0;
+			write(1, "\n", 1);
+		else
+			write(1, &character, 1);
+		bit = 0;
 		character = 0;
 	}
 	kill(info->si_pid, SIGUSR1);
 }
 
-void	handler_ack(int signum)
-{
-	(void)signum;
-	ft_printf("Signal received");
-}
-
 int	main(void)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = handler;
 	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 	{
-		ft_printf("Error: Sigaction SIGUSR1 is failed\n");
+		ft_printf("Error: Sigaction SIGUSR1 failed\n");
 		return (1);
 	}
 	if (sigaction(SIGUSR2, &sa, NULL) == -1)
 	{
-		ft_printf("Error: Sigaction SIGUSR2 is failed\n");
+		ft_printf("Error: Sigaction SIGUSR2 failed\n");
 		return (1);
 	}
 	ft_putnbr(getpid());
