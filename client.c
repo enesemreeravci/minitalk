@@ -6,7 +6,7 @@
 /*   By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 21:52:09 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/23 12:10:51 by eeravci          ###   ########.fr       */
+/*   Updated: 2025/03/26 13:07:04 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,19 @@
 
 #define SIGNAL_DELAY_US 100
 
+/*
+a placeholder signal handler.
+registers to catch SIGUSR1 from the server as an "acknowledgment"
+even though it's empty, it allows the client to continue safely without being interrupted
+*/
 void	handler_ack(int signum)
 {
 	(void)signum;
 }
 
+/*converts a string to an integer.
+the client receives the server's pid as a string argument argv[1]
+and needs to convert it to an integer to use with kill()*/
 int	ft_atoi(char *str)
 {
 	int	i;
@@ -45,6 +53,11 @@ int	ft_atoi(char *str)
 	return (result * sign);
 }
 
+/*
+sends one character to the server bit by bit by using UNIX signals.
+if the bit Is 1, it sends SIGUSR2
+if the bit is 0, it sends SIGUSR1
+*/
 void	send_signal(pid_t server_pid, char c)
 {
 	int	bit;
@@ -53,15 +66,9 @@ void	send_signal(pid_t server_pid, char c)
 	while (bit >= 0)
 	{
 		if ((c >> bit) & 1)
-		{
 			kill(server_pid, SIGUSR2);
-			ft_printf("Char: %c | Bit: %d | Signal: SIGUSR2\n", c, bit);
-		}
 		else
-		{
 			kill(server_pid, SIGUSR1);
-			ft_printf("Char: %c | Bit: %d | Signal: SIGUSR1\n", c, bit);
-		}
 		usleep(SIGNAL_DELAY_US);
 		bit--;
 	}

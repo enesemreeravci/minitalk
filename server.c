@@ -6,7 +6,7 @@
 /*   By: eeravci <enes.nev@gmail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 14:10:04 by eeravci           #+#    #+#             */
-/*   Updated: 2025/03/23 12:10:54 by eeravci          ###   ########.fr       */
+/*   Updated: 2025/03/26 13:34:54 by eeravci          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ void	ft_putnbr(int n)
 	c = (n % 10) + '0';
 	write(1, &c, 1);
 }
-
+/*
+signal handler that gets called every time the server receives a signal (SIGUSR1 AND SIGUSR2)
+it builds each character bit byt bit
+once a full characher is received which is 8 bits,
+it prints it. (1 char = 1 byte = 8 bits)
+*/
 void	handler(int sig, siginfo_t *info, void *context)
 {
 	static int	bit = 0;
